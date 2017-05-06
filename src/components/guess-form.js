@@ -1,27 +1,27 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {makeGuess} from '../actions/actions';
 
-export default class GuessForm extends React.Component {
-    onGuess(event) {
+export function GuessForm(props) {
+    let userInput;
+
+    function submitGuess(event) {
         event.preventDefault();
-
-        if (this.props.onGuess) {
-            const value = this.input.value;
-            this.props.onGuess(value);
-        }
-        this.input.value = '';
+        const value = userInput.value;
+        props.dispatch(makeGuess(value));
     }
 
-    render() {
-        return (
-            <form onSubmit={e => this.onGuess(e)}>
-                <label htmlFor="userGuess">Enter your Guess</label>
-                <input type="text" name="userGuess" id="userGuess"
-                    className="text" maxLength="3" autoComplete="off"
-                    placeholder={Math.round(Math.random() * 100)} required
-                    ref={input => this.input = input} />
-                <input type="submit" id="guessButton" className="button" name="submit" value="Guess"/>
-            </form>
-        );
-    }
+    return (
+        <form onSubmit={e => submitGuess(e)}>
+            <input type="text" name="userGuess" id="userGuess"
+                className="text" maxLength="3" autoComplete="off"
+                placeholder="Enter your Guess" required
+                ref={input => userInput = input} />
+            <input type="submit" id="guessButton" className="button" name="submit" value="Guess"/>
+        </form>
+    );
+
 };
 
+export default connect()(GuessForm);
+// high order component
